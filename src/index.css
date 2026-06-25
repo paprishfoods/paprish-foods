@@ -1,0 +1,348 @@
+@import "tailwindcss";
+
+/* ============================================
+   PAPRISH FOODS — Design System
+   ============================================ */
+
+@theme {
+  /* Brand Palette */
+  --color-paprish-50: #fdf8f0;
+  --color-paprish-100: #faf1e0;
+  --color-paprish-200: #f2dbb8;
+  --color-paprish-300: #e8bf84;
+  --color-paprish-400: #dda05a;
+  --color-paprish-500: #c4853d;
+  --color-paprish-600: #a66a2e;
+  --color-paprish-700: #855229;
+  --color-paprish-800: #6e4326;
+  --color-paprish-900: #5c3923;
+
+  /* Deep Crimson */
+  --color-crimson-50: #fff0f0;
+  --color-crimson-100: #ffe0e0;
+  --color-crimson-200: #ffc0c0;
+  --color-crimson-300: #ff9090;
+  --color-crimson-400: #f56060;
+  --color-crimson-500: #ee3333;
+  --color-crimson-600: #e52020;
+  --color-crimson-700: #DD1F1F;
+  /* ← main brand red, use this everywhere */
+  --color-crimson-800: #c41a1a;
+  --color-crimson-900: #8b1010;
+
+  /* Warm Creams */
+  --color-cream: #faf7f2;
+  --color-cream-dark: #f3ede4;
+  --color-parchment: #f7f3eb;
+
+  /* Deep Charcoal */
+  --color-charcoal: #1e1e1e;
+  --color-charcoal-light: #2d2d2d;
+  --color-charcoal-muted: #3a3a3a;
+
+  /* Typography */
+  /* Change the serif font to match the sans-serif (Inter) font used for "Paprish" */
+  --font-serif: "Inter", system-ui, -apple-system, sans-serif;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #faf7f2;
+  color: #1e1e1e;
+  overflow-x: hidden;
+}
+
+/* ADD THIS TO MAKE ALL HEADINGS CAPITALIZED GLOBALLY */
+h1, h2, h3, h4, h5, h6 {
+  text-transform: uppercase;
+}
+
+/* Selection */
+::selection {
+  background-color: #c4853d;
+  color: #ffffff;
+}
+
+/* ============================================
+   ANIMATIONS & KEYFRAMES
+   ============================================ */
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes reveal-line {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes subtle-float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes draw-border {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.animate-fade-up {
+  animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.8s ease forwards;
+}
+
+.animate-reveal-line {
+  animation: reveal-line 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+.animate-float {
+  animation: subtle-float 4s ease-in-out infinite;
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+/* Stagger delays */
+.delay-100 {
+  animation-delay: 0.1s;
+}
+
+.delay-200 {
+  animation-delay: 0.2s;
+}
+
+.delay-300 {
+  animation-delay: 0.3s;
+}
+
+.delay-400 {
+  animation-delay: 0.4s;
+}
+
+.delay-500 {
+  animation-delay: 0.5s;
+}
+
+.delay-600 {
+  animation-delay: 0.6s;
+}
+
+.delay-700 {
+  animation-delay: 0.7s;
+}
+
+/* Animation fill mode for staggered children */
+.stagger-children>* {
+  opacity: 0;
+  animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ============================================
+   SCROLL-DRIVEN REVEAL (via intersection observer polyfill approach)
+   We use a class toggle approach — elements get .is-visible via JS
+   ============================================ */
+
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================
+   DECORATIVE ELEMENTS
+   ============================================ */
+
+.accent-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #c4853d;
+  display: inline-block;
+}
+
+.accent-line {
+  width: 48px;
+  height: 2px;
+  background-color: #b11c1c;
+  /* was #c4853d */
+  display: inline-block;
+}
+
+.texture-dots {
+  background-image: radial-gradient(#dda05a 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Curved divider */
+.divider-curve {
+  position: relative;
+  height: 60px;
+  overflow: hidden;
+}
+
+.divider-curve::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -5%;
+  width: 110%;
+  height: 40px;
+  background: #faf7f2;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+}
+
+/* ============================================
+   IMAGE TREATMENTS
+   ============================================ */
+
+.image-frame {
+  position: relative;
+}
+
+.image-frame::after {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: -12px;
+  bottom: -12px;
+  border: 1px solid #dda05a;
+  z-index: -1;
+  opacity: 0.4;
+}
+
+.image-frame-right::after {
+  left: -12px;
+  right: 12px;
+}
+
+/* ============================================
+   HOVER EFFECTS
+   ============================================ */
+
+.hover-lift {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.12);
+}
+
+/* ============================================
+   PRODUCT CARD SPECIFIC
+   ============================================ */
+
+.product-card-ribbon {
+  align-self: flex-start;
+  background: #b11c1c;
+  color: white;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  text-transform: uppercase;
+  padding: 5px 7px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+  max-width: 100%;
+  white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .product-card-ribbon {
+    font-size: 0.68rem;
+    padding: 6px 10px;
+    margin-bottom: 10px;
+  }
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f3ede4;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #dda05a;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c4853d;
+}
