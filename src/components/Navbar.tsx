@@ -13,10 +13,11 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // UPDATED: Products is now the second item
   const navLinks = [
     { name: "Home", href: "#home" },
-    { name: "About", href: "#about" },
     { name: "Products", href: "#products" },
+    { name: "About", href: "#about" },
     { name: "Quality Promise", href: "#quality" },
     { name: "Reviews", href: "#reviews" },
     { name: "Contact", href: "#contact" },
@@ -24,23 +25,20 @@ export default function Navbar() {
 
   return (
     <header
-      /* FIXED: Now turns solid white and shrinks when scrolled OR when menu is open */
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${isScrolled || mobileMenuOpen
-        ? "bg-white/95 backdrop-blur-md shadow-sm py-2"
-        : "bg-transparent py-5 lg:py-8"
+          ? "bg-white/95 backdrop-blur-md shadow-sm py-2"
+          : "bg-transparent py-5 lg:py-8"
         }`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-10 flex items-center justify-between">
-
         {/* ─── LOGO ─── */}
         <a href="#home" className="flex items-center group">
           <img
             src="/images/logo.png"
             alt="Paprish Foods Logo"
-            /* FIXED: Logo shrinks down if the menu is opened, pulling the dropdown to the top! */
             className={`w-auto object-contain transition-all duration-500 group-hover:scale-105 ${isScrolled || mobileMenuOpen
-              ? "h-10 lg:h-16 -mt-1"
-              : "h-42 lg:h-[270px] -mt-4"
+                ? "h-10 lg:h-16 -mt-1"
+                : "h-42 lg:h-[270px] -mt-4"
               }`}
           />
         </a>
@@ -70,7 +68,16 @@ export default function Navbar() {
             }`}
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             {mobileMenuOpen ? (
               <path d="M18 6L6 18M6 6l12 12" />
             ) : (
@@ -82,7 +89,6 @@ export default function Navbar() {
 
       {/* ─── Mobile Dropdown Menu ─── */}
       {mobileMenuOpen && (
-        /* FIXED: Added `h-screen pb-32` to fully cover the background content below it */
         <div className="lg:hidden absolute top-full left-0 w-full h-screen bg-white shadow-xl border-t border-gray-100 py-4 px-6 flex flex-col gap-2 animate-fade-in pb-32">
           {navLinks.map((link) => (
             <a
