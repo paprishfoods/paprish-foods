@@ -11,19 +11,6 @@ export default function BannerCarousel({ images, loading = false }: BannerCarous
     const touchStartX = useRef(0);
     const touchEndX = useRef(0);
 
-    // Preload non-first images in background
-    useEffect(() => {
-        if (images.length <= 1) return;
-        const preloadNext = (index: number) => {
-            if (index >= images.length) return;
-            const img = new Image();
-            img.src = images[index];
-            img.onload = () => preloadNext(index + 1);
-            img.onerror = () => preloadNext(index + 1);
-        };
-        preloadNext(1);
-    }, [images]);
-
     // Auto-slide only if not loading and we have images
     useEffect(() => {
         if (loading || images.length <= 1 || isPaused) return;
@@ -54,6 +41,14 @@ export default function BannerCarousel({ images, loading = false }: BannerCarous
         }
         setIsPaused(false);
     }
+
+    // Preload the next image whenever currentIndex changes
+    useEffect(() => {
+        if (images.length <= 1) return;
+        const nextIndex = (currentIndex + 1) % images.length;
+        const img = new Image();
+        img.src = images[nextIndex];
+    }, [currentIndex, images]);
 
     const goToSlide = (index: number) => {
         setCurrentIndex(index);
@@ -101,7 +96,7 @@ export default function BannerCarousel({ images, loading = false }: BannerCarous
                                 src={src}
                                 alt={`Banner ${index + 1}`}
                                 className="w-full h-full object-cover"
-                                loading="eager"
+                                loading={index === 0 ? "eager" : "lazy"}
                                 decoding="async"
                                 fetchPriority={index === 0 ? "high" : "auto"}
                                 onError={(e) => {

@@ -61,14 +61,12 @@ export default function App() {
           setBannerImages([]);
         } else if (data && data.length > 0) {
           const images = data.map((b: Banner) => b.image_url);
-          images.forEach((url, i) => {
-            const link = document.createElement("link");
-            link.rel = "preload";
-            link.as = "image";
-            link.href = url;
-            link.fetchPriority = i === 0 ? "high" : "auto";
-            document.head.appendChild(link);
-          });
+          const link = document.createElement("link");
+          link.rel = "preload";
+          link.as = "image";
+          link.href = images[0];
+          link.fetchPriority = "high";
+          document.head.appendChild(link);
           setBannerImages(images);
         } else {
           setBannerImages([]);
