@@ -101,7 +101,8 @@ export default function BannerCarousel({ images, loading = false }: BannerCarous
                                 src={src}
                                 alt={`Banner ${index + 1}`}
                                 className="w-full h-full object-cover"
-                                loading={index === 0 ? "eager" : "lazy"}
+                                loading="eager"
+                                decoding="async"
                                 fetchPriority={index === 0 ? "high" : "auto"}
                                 onError={(e) => {
                                     (e.target as HTMLImageElement).src =
