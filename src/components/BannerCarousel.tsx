@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 interface BannerCarouselProps {
     images: string[];
@@ -10,6 +10,19 @@ export default function BannerCarousel({ images, loading = false }: BannerCarous
     const [isPaused, setIsPaused] = useState(false);
     const touchStartX = useRef(0);
     const touchEndX = useRef(0);
+
+    // Preload non-first images in background
+    useEffect(() => {
+        if (images.length <= 1) return;
+        const preloadNext = (index: number) => {
+            if (index >= images.length) return;
+            const img = new Image();
+            img.src = images[index];
+            img.onload = () => preloadNext(index + 1);
+            img.onerror = () => preloadNext(index + 1);
+        };
+        preloadNext(1);
+    }, [images]);
 
     // Auto-slide only if not loading and we have images
     useEffect(() => {
@@ -89,6 +102,7 @@ export default function BannerCarousel({ images, loading = false }: BannerCarous
                                 alt={`Banner ${index + 1}`}
                                 className="w-full h-full object-cover"
                                 loading={index === 0 ? "eager" : "lazy"}
+                                fetchPriority={index === 0 ? "high" : "auto"}
                                 onError={(e) => {
                                     (e.target as HTMLImageElement).src =
                                         'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450"%3E%3Crect fill="%23fdf6ec" width="800" height="450"/%3E%3Ctext fill="%23c4853d" font-family="serif" font-size="30" x="50%25" y="50%25" text-anchor="middle" dy=".3em"%3ENo Image%3C/text%3E%3C/svg%3E';
