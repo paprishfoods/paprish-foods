@@ -60,9 +60,7 @@ export default function App() {
           console.error("Error fetching banners:", error);
           setBannerImages([]);
         } else if (data && data.length > 0) {
-          const images = data.map((b: Banner) =>
-            b.image_url.replace("/object/public/", "/render/image/public/") + "?width=1200&quality=70&format=webp"
-          );
+          const images = data.map((b: Banner) => b.image_url);
           const preloadLink = document.createElement("link");
           preloadLink.rel = "preload";
           preloadLink.as = "image";
