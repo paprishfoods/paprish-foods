@@ -191,8 +191,8 @@ export default function BirthdayOffer() {
       <button
         onClick={openOffer}
         className={`fixed bottom-6 left-6 z-30 flex items-center gap-2 pl-3 pr-4 py-3 rounded-full shadow-xl transition-all duration-300 font-semibold text-sm ${eligible
-            ? "bg-crimson-700 text-white shadow-crimson-700/30 hover:bg-crimson-800 hover:scale-105"
-            : "bg-gray-200 text-gray-500 shadow-gray-300/40"
+          ? "bg-crimson-700 text-white shadow-crimson-700/30 hover:bg-crimson-800 hover:scale-105"
+          : "bg-gray-200 text-gray-500 shadow-gray-300/40"
           }`}
       >
         <span className="text-lg leading-none">🎂</span>
@@ -222,7 +222,7 @@ export default function BirthdayOffer() {
             <p className="text-charcoal-muted/70 text-sm leading-relaxed mb-6">
               To celebrate your special day with you, we'd love to send you a little treat. Select at least{" "}
               <span className="font-semibold text-crimson-700">{MIN_ITEMS} products</span> from our range to claim
-              your birthday offer.
+              your birthday gift.
             </p>
             <button
               onClick={goToProducts}
