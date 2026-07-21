@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, type FormEvent } from "react";
 import Select from "react-select";
 import { useCart } from "@/context/CartContext";
-// 1. Import your new data file
+import { supabase } from "@/lib/supabase";
 import { INDIA_LOCATIONS } from "@/data/indiaLocations"; 
 
 const PLACEHOLDER = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect fill='%23f2dbb8' width='400' height='300'/%3E%3Ctext fill='%23c4853d' font-family='serif' font-size='18' x='50%25' y='50%25' text-anchor='middle' dy='.3em'%3ENo Image%3C/text%3E%3C/svg%3E";
@@ -115,7 +115,7 @@ export default function CartDrawer({ open, onClose }: Props) {
     setCustomerDetails((prev) => ({ ...prev, [field]: value }));
   }
 
-  function handleWhatsApp(event: FormEvent<HTMLFormElement>) {
+  async function handleWhatsApp(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (items.length === 0) return;
 
@@ -124,13 +124,37 @@ export default function CartDrawer({ open, onClose }: Props) {
       return;
     }
 
+    const orderItems = items.map((item) => ({
+      id: item.id,
+      name: item.name,
+      quantity: item.quantity,
+      price: item.price,
+    }));
+
+    const shipping = SHIPPING_RATES[shippingRegion];
+    const finalTotal = total + shipping.price;
+
+    const { error: insertError } = await supabase.from("orders").insert({
+      name: customerDetails.name,
+      phone: customerDetails.phone,
+      address: customerDetails.address,
+      district: customerDetails.district,
+      state: customerDetails.state,
+      pincode: customerDetails.pincode,
+      alternate_mobile: customerDetails.alternateMobile || null,
+      shipping_region: shippingRegion,
+      items: orderItems,
+      subtotal: total,
+      shipping: shipping.price,
+      total: finalTotal,
+      status: "pending",
+    });
+    if (insertError) console.error("Order save failed:", insertError);
+
     const lines = items.map(
       (item, i) =>
         `${i + 1}. ${item.name} \u00d7 ${item.quantity} \u2014 \u20B9${parseInt(item.price) * item.quantity}`
     ).join("\n");
-
-    const shipping = SHIPPING_RATES[shippingRegion];
-    const finalTotal = total + shipping.price;
 
     const message =
       `Hello Paprish Foods! 🌿\n\nHere is my order:\n\n${lines}\n\n*Customer Details*\nName: ${customerDetails.name}\nPhone: ${customerDetails.phone}\nShipping Address: ${customerDetails.address}\nDistrict: ${customerDetails.district}\nState: ${customerDetails.state}\nPincode: ${customerDetails.pincode}\nAlternate Mobile: ${customerDetails.alternateMobile || "Not provided"}\n\n📦 Shipping (${shipping.label}): ₹${shipping.price}\n🧾 *Total: ₹${finalTotal}*\n\nPlease confirm availability and share payment details. Thank you!`;
